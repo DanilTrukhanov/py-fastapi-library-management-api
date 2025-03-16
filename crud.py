@@ -26,10 +26,19 @@ def create_author(db: Session, data: AuthorRequestSchema) -> AuthorModel:
         raise ValueError
 
 
-def get_all_books(db: Session, page: int, per_page: int):
-    return db.query(BookModel).offset(
-        per_page * (page - 1)
-    ).limit(per_page).all()
+def get_all_books(
+        db: Session,
+        page: int,
+        per_page: int,
+        author_id: int | None
+):
+    queryset = db.query(BookModel)
+    if author_id is not None:
+        queryset = queryset.where(BookModel.author_id == author_id)
+    queryset = queryset.offset(
+            per_page * (page - 1)
+        ).limit(per_page)
+    return queryset
 
 
 def get_author(db: Session, author_id: int) -> AuthorModel | None:

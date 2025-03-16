@@ -68,9 +68,10 @@ def get_single_author(
 def get_books(
         page: int = Query(ge=1, default=1),
         per_page: int = Query(ge=1, le=5, default=3),
+        author_id: int = Query(default=None),
         db: Session = Depends(get_db)
 ):
-    books = crud.get_all_books(db, page, per_page)
+    books = crud.get_all_books(db, page, per_page, author_id)
     return books
 
 
